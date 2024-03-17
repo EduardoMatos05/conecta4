@@ -4,7 +4,7 @@
 #define NUM_FILAS 6
 
 void imprimirTablero(int matriz[][NUM_COLUMNAS]);
-int espacioVacioSuperior(int matriz[][NUM_COLUMNAS], int opcionColumna);
+int encontrarEspacioVacioInferior(int matriz[][NUM_COLUMNAS], int opcionColumna);
 void ponerPieza(int matriz[][NUM_COLUMNAS], int fila, int columna, int pieza);
 
 int main(int argc, char *argv[]) {
@@ -19,12 +19,12 @@ int main(int argc, char *argv[]) {
         if (turno % 2 == 1) {
             printf("Turno jugador 1\n");
             scanf("%i", &opcion);
-            filaDeFicha= espacioVacioSuperior(tablero, opcion);
+            filaDeFicha= encontrarEspacioVacioInferior(tablero, opcion);
             ponerPieza(tablero, filaDeFicha, opcion, 1);
         } else {
             printf("Turno jugador 2\n");
             scanf("%i", &opcion);
-            filaDeFicha= espacioVacioSuperior(tablero, opcion);
+            filaDeFicha= encontrarEspacioVacioInferior(tablero, opcion);
             ponerPieza(tablero, filaDeFicha, opcion, 2);
         }
 
@@ -36,13 +36,11 @@ int main(int argc, char *argv[]) {
 
 void imprimirTablero(int matriz[][NUM_COLUMNAS]) {
     int ii, jj;
-    
-    for (jj = 0; jj<NUM_COLUMNAS; jj++) {
+    for(jj=0;jj<NUM_COLUMNAS;jj++){
         printf(" %i", jj);
     }
     printf("\n");
-    
-    for (ii = NUM_FILAS - 1; ii >= 0; ii--) {
+    for (ii = 0; ii < NUM_FILAS; ii++) {
         printf("|");
         for (jj = 0; jj < NUM_COLUMNAS; jj++) {
             printf("%i|", matriz[ii][jj]);
@@ -51,16 +49,16 @@ void imprimirTablero(int matriz[][NUM_COLUMNAS]) {
     }
 }
 
-
-int espacioVacioSuperior(int matriz[][NUM_COLUMNAS], int opcionColumna){
-    int ii;
-    for(ii=0; ii<NUM_FILAS; ii++){
-        if(matriz[ii][opcionColumna]==0){
-            return ii;
+int encontrarEspacioVacioInferior(int matriz[][NUM_COLUMNAS], int opcionColumna) {
+    int fila;
+    for (fila = NUM_FILAS - 1; fila >= 0; fila--) {
+        if (matriz[fila][opcionColumna] == 0) {
+            return fila;
         }
     }
     return -1;
 }
+
 
 void ponerPieza(int matriz[][NUM_COLUMNAS], int fila, int columna, int pieza){
     matriz[fila][columna]= pieza;
