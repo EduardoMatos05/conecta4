@@ -6,7 +6,7 @@
 void imprimirTablero(int matriz[][NUM_COLUMNAS]);
 int encontrarEspacioVacioInferior(int matriz[][NUM_COLUMNAS], int opcionColumna);
 void ponerPieza(int matriz[][NUM_COLUMNAS], int fila, int columna, int pieza);
-int chequeoHorizontalVertical(int matriz[][NUM_COLUMNAS],int fila,int columna,int pieza);
+int chequeoGanador(int matriz[][NUM_COLUMNAS],int fila,int columna,int pieza);
 int jugarTurno(int jugador);
 
 int tablero[NUM_FILAS][NUM_COLUMNAS] = {0};
@@ -82,7 +82,7 @@ void ponerPieza(int matriz[][NUM_COLUMNAS], int fila, int columna, int pieza){
     return;
 }
 
-int chequeoHorizontalVertical(int matriz[][NUM_COLUMNAS],int fila,int columna,int pieza){
+int chequeoGanador(int matriz[][NUM_COLUMNAS],int fila,int columna,int pieza){
     int ii, jj;
 
     for(ii=0; ii<=NUM_COLUMNAS-4; ii++){
@@ -138,12 +138,13 @@ int chequeoHorizontalVertical(int matriz[][NUM_COLUMNAS],int fila,int columna,in
 
 int jugarTurno(int jugador){
 
-    int juego, turno, opcion, filaDeFicha;
-    printf("Turno jugador %i\n", jugador);
+    int opcion, filaDeFicha;
+    printf("Turno jugador %i ", jugador);
 
     //obtener y validar input
     do { 
         do {
+            printf("(0-6)\n");
             scanf("%i", &opcion);
         } while ((opcion < 0) || (opcion > 6));
 
@@ -151,7 +152,7 @@ int jugarTurno(int jugador){
     } while (filaDeFicha == -1);
 
     ponerPieza(tablero, filaDeFicha, opcion, jugador);
-    if(chequeoHorizontalVertical(tablero, filaDeFicha, opcion, jugador)){
+    if(chequeoGanador(tablero, filaDeFicha, opcion, jugador)){
         printf("gano el jugador %i\n", jugador);
         return 0;
     }
