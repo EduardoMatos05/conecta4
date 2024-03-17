@@ -144,7 +144,7 @@ int jugarTurno(int jugador){
     //obtener y validar input
     do { 
         do {
-            printf("(0-6)\n");
+            printf("Ingrese una columna de (0 a 6)\n");
             scanf("%i", &opcion);
         } while ((opcion < 0) || (opcion > 6));
 
