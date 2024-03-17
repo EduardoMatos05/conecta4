@@ -7,9 +7,11 @@ void imprimirTablero(int matriz[][NUM_COLUMNAS]);
 int encontrarEspacioVacioInferior(int matriz[][NUM_COLUMNAS], int opcionColumna);
 void ponerPieza(int matriz[][NUM_COLUMNAS], int fila, int columna, int pieza);
 int chequeoHorizontalVertical(int matriz[][NUM_COLUMNAS],int fila,int columna,int pieza);
+int jugarTurno(int jugador);
+
+int tablero[NUM_FILAS][NUM_COLUMNAS] = {0};
 
 int main(int argc, char *argv[]) {
-    int tablero[NUM_FILAS][NUM_COLUMNAS] = {0};
     int juego, turno, opcion, filaDeFicha;
     juego = 1;
     turno = 1;
@@ -17,26 +19,10 @@ int main(int argc, char *argv[]) {
     while (juego)
     {
         imprimirTablero(tablero);
-        if (turno % 2 == 1) {
-            printf("Turno jugador 1\n");
-            scanf("%i", &opcion);
-            filaDeFicha= encontrarEspacioVacioInferior(tablero, opcion);
-            ponerPieza(tablero, filaDeFicha, opcion, 1);
-            if(chequeoHorizontalVertical(tablero, filaDeFicha, opcion, 1)){
-                printf("gano el jugador 1\n");
-                juego = 0;
-            }
-        } else {
-            printf("Turno jugador 2\n");
-            scanf("%i", &opcion);
-            filaDeFicha= encontrarEspacioVacioInferior(tablero, opcion);
-            ponerPieza(tablero, filaDeFicha, opcion, 2);
-            if(chequeoHorizontalVertical(tablero, filaDeFicha, opcion, 2)){
-                printf("gano el jugador 2\n");
-                juego = 0;
-            }
-        }
-
+        if (turno % 2 == 1) 
+            juego = jugarTurno(1);
+        else 
+            juego = jugarTurno(2);
         turno++;
     }
     imprimirTablero(tablero);
@@ -126,4 +112,21 @@ int chequeoHorizontalVertical(int matriz[][NUM_COLUMNAS],int fila,int columna,in
         }
     }
     return 0;//falso
+}
+
+
+int jugarTurno(int jugador){
+
+    int juego, turno, opcion, filaDeFicha;
+     printf("Turno jugador %i\n", jugador);
+    scanf("%i", &opcion);
+    filaDeFicha= encontrarEspacioVacioInferior(tablero, opcion);
+    ponerPieza(tablero, filaDeFicha, opcion, jugador);
+    if(chequeoHorizontalVertical(tablero, filaDeFicha, opcion, jugador)){
+        printf("gano el jugador %i\n", jugador);
+        return 0;
+    }
+    
+    return 1;
+
 }
