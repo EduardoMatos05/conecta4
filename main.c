@@ -76,7 +76,8 @@ void ponerPieza(int matriz[][NUM_COLUMNAS], int fila, int columna, int pieza){
 }
 
 int chequeoHorizontalVertical(int matriz[][NUM_COLUMNAS],int fila,int columna,int pieza){
-    int ii;
+    int ii, jj;
+
     for(ii=0; ii<=NUM_COLUMNAS-4; ii++){
         if(matriz[fila][ii]== pieza && matriz[fila][ii+1]== pieza && matriz[fila][ii+2]==pieza && matriz[fila][ii+3]== pieza){
             return 1;//verdadero
@@ -89,5 +90,40 @@ int chequeoHorizontalVertical(int matriz[][NUM_COLUMNAS],int fila,int columna,in
         }
     }
 
+//chequeo diagonal: /
+
+    //encontrar el caso base a checar, en diagonal hacia abajo sin que se salga del tablero
+    ii = fila;
+    jj = columna;
+    while ((ii < NUM_FILAS - 1) &&  (jj > 0 ))
+    {
+        ii++;
+        jj--;
+    }
+
+    //checa para todos los casos yendo en diagonal hacia arriba sin que se salga
+    for(ii=ii ,jj = jj ; (ii -3 >= 0) && (jj<=NUM_COLUMNAS-4); ii--, jj++){
+        if(matriz[ii][jj]== pieza && matriz[ii-1][jj+1]== pieza && matriz[ii-2][jj+2]== pieza && matriz[ii-3][jj+3]== pieza){
+            return 1; // verdadero
+        }
+    }
+
+//chequeo diagonal: "\"
+
+    //encontrar el caso base a checar, en diagonal hacia abajo sin que se salga del tablero
+    ii = fila;
+    jj = columna;
+    while ((ii < NUM_FILAS - 1) &&  (jj < NUM_COLUMNAS -1 ))
+    {
+        ii++;
+        jj++;
+    }
+
+    //checa para todos los casos yendo en diagonal hacia arriba sin que se salga
+    for(ii=ii ,jj = jj ; (ii - 3 >= 0) && (jj - 3 >= 0); ii--, jj--){
+        if(matriz[ii][jj]== pieza && matriz[ii-1][jj-1]== pieza && matriz[ii-2][jj-2]== pieza && matriz[ii-3][jj-3]== pieza){
+            return 1; // verdadero
+        }
+    }
     return 0;//falso
 }
