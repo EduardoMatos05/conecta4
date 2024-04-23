@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
+#include <conio.h>
 #define NUM_COLUMNAS 7
 #define NUM_FILAS 6
 
@@ -16,9 +18,12 @@ int main(int argc, char *argv[]) {
     juego = 1;
     turno = 1;
 
+    printf("utiliza las flechas para mover la ficha y enter para dejarla caer\n");
+    system("pause");
+
     while (juego)
     {
-        imprimirTablero(tablero);
+        //imprimirTablero(tablero);
         if (turno % 2 == 1) 
             juego = jugarTurno(1);
         else 
@@ -26,6 +31,7 @@ int main(int argc, char *argv[]) {
         turno++;
 
     }
+
     imprimirTablero(tablero);
 
 
@@ -34,12 +40,12 @@ int main(int argc, char *argv[]) {
 
 void imprimirTablero(int matriz[][NUM_COLUMNAS]) {
     int ii, jj;
-    for(jj=0;jj<NUM_COLUMNAS;jj++){
-        printf(" %i  ", jj);
-    }
+
+    printf("\033[0m"); 
+
     printf("\n");
     for (ii = 0; ii < NUM_FILAS; ii++) {
-        printf("|");
+        printf("| ");
         for (jj = 0; jj < NUM_COLUMNAS; jj++) {
             //imprimir ficha roja
             if (matriz[ii][jj] == 1)
@@ -57,6 +63,7 @@ void imprimirTablero(int matriz[][NUM_COLUMNAS]) {
                 printf("\033[0m"); 
                 printf("| "); 
             }
+            //imprimir el 0
             else 
                 printf("%i | ", matriz[ii][jj]);
             
@@ -72,7 +79,7 @@ int encontrarEspacioVacioInferior(int matriz[][NUM_COLUMNAS], int opcionColumna)
             return fila;
         }
     }
-    printf("columna llena\n");
+    //printf("columna llena\n");
     return -1;
 }
 
@@ -138,21 +145,72 @@ int chequeoGanador(int matriz[][NUM_COLUMNAS],int fila,int columna,int pieza){
 
 int jugarTurno(int jugador){
 
-    int opcion, filaDeFicha;
-    printf("Turno jugador %i ", jugador);
+    int opcion, filaDeFicha, columnaSelec;
+    char c;
+    c = ' ';
+    columnaSelec = 0;
 
-    //obtener y validar input
-    do { 
-        do {
-            printf("Ingrese una columna de (0 a 6)\n");
-            scanf("%i", &opcion);
-        } while ((opcion < 0) || (opcion > 6));
+    
+    //ciclo do por si la columna esta llena
+    do {
+        //ciclo while para checar si ya se ingreso enter
+        while ((int)c != 13 )
+        {
+            system("cls");
 
+            if (jugador == 1)
+                printf("\033[0;31m"); 
+            else 
+                printf("\033[0;36m");
+            
+
+            printf("Turno jugador %i \n", jugador);
+
+            //imprimir las ficha que se esta por tirar en el lugar adeacuado
+            for (int i = 0; i < NUM_COLUMNAS; i++)
+                if (i == columnaSelec)
+                    printf("  O  ");
+                else 
+                    printf("    ");
+
+            imprimirTablero(tablero);
+
+            
+            c = getch();
+
+            //checa si c es alguna de las flechas y se se puede recorrer la ficha, en dado caso la recorre
+            if ((int)c == 77 && columnaSelec < NUM_COLUMNAS - 1)
+            {
+                columnaSelec++;
+            }
+
+            else if ((int)c == 75 && columnaSelec > 0)
+            {
+                columnaSelec--;
+            }
+            
+        }
+
+        //encuentra el espacio correspondiente a la ficha que se dejo caer 
+        opcion = columnaSelec;
         filaDeFicha= encontrarEspacioVacioInferior(tablero, opcion);
+        //si no hay espacio la funcion regresa -1, ponemos que c = ' ' para poder volver a ingresar al ciclo while
+        if (filaDeFicha == -1)
+            c = ' ';
     } while (filaDeFicha == -1);
 
     ponerPieza(tablero, filaDeFicha, opcion, jugador);
-    if(chequeoGanador(tablero, filaDeFicha, opcion, jugador)){
+
+    //detecta ganaddor
+    if(chequeoGanador(tablero, filaDeFicha, opcion, jugador))
+    {
+        system("cls");
+        //checa para imprimir el texto del color correspondiente
+        if (jugador == 1)
+                printf("\033[0;31m"); 
+            else 
+                printf("\033[0;36m");
+    
         printf("gano el jugador %i\n", jugador);
         return 0;
     }
